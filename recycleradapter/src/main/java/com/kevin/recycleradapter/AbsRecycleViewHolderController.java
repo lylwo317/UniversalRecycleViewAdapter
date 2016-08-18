@@ -21,7 +21,7 @@ public abstract class AbsRecycleViewHolderController
     }
 
     /**
-     * 创建布局
+     * {@link GeneralRecyclerViewAdapter}会调用来创建{@link android.support.v7.widget.RecyclerView.ViewHolder}对象
      * @param context
      * @param parent
      * @return

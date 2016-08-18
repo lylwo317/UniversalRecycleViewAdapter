@@ -1,26 +1,35 @@
 package com.kevin.universalrecycleviewadapter.displayitems;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.Toast;
 
 import com.kevin.recycleradapter.GeneralRecyclerViewAdapter;
-import com.kevin.recycleradapter.IRecycleViewDisplayListItem;
+import com.kevin.recycleradapter.IRecycleViewDisplayItem;
 import com.kevin.universalrecycleviewadapter.viewholders.SecondTypeViewHolderController;
 
 /**
  * Created by Administrator on 2016/8/17.
  */
-public class SecondTypeDisplayItem implements IRecycleViewDisplayListItem<SecondTypeViewHolderController, String> {
+public class SecondTypeDisplayItem implements IRecycleViewDisplayItem<SecondTypeViewHolderController, String>
+{
 
     private String data;
 
     @Override
-    public void onShow(Context context, SecondTypeViewHolderController viewHolderController, int position, GeneralRecyclerViewAdapter generalRecyclerViewAdapter) {
+    public void onShow(final Context context, SecondTypeViewHolderController viewHolderController, final int position, final GeneralRecyclerViewAdapter generalRecyclerViewAdapter) {
         viewHolderController.secondTypeItemName.setText(data);
-    }
-
-    @Override
-    public String getDisplayItemId() {
-        return null;
+        viewHolderController.rootView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                SecondTypeDisplayItem secondTypeDisplayItem = new SecondTypeDisplayItem();
+                secondTypeDisplayItem.setDisplayData(String.valueOf(position));
+                generalRecyclerViewAdapter.addItem(position,secondTypeDisplayItem);
+            }
+        });
     }
 
     @Override

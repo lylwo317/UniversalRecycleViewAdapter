@@ -9,7 +9,7 @@ import java.util.List;
 public class ConvertObjectFuntional {
 
     public interface Processor<From,To>{
-        public To process(From currentIndexFrom,int srcIndex,From preFrom);
+        public To process(From currentFrom,int srcIndex,From preFrom);
     }
 
     public static <From,To> List<To> convert(List<From> sources, Processor<From,To> processor) {

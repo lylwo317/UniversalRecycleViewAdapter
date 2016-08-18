@@ -8,7 +8,7 @@ import android.content.Context;
  * @param <T> AbsViewHolder
  * @param <U> ContentData Type
  */
-public interface IRecycleViewDisplayListItem<T extends AbsRecycleViewHolderController,U> {
+public interface IRecycleViewDisplayItem<T extends AbsRecycleViewHolderController,U> {
 
     /**
      * 设置对应的viewholder的值
@@ -18,12 +18,6 @@ public interface IRecycleViewDisplayListItem<T extends AbsRecycleViewHolderContr
      * @param generalRecyclerViewAdapter
      */
     void onShow(Context context, T viewHolderController, int position, GeneralRecyclerViewAdapter generalRecyclerViewAdapter);
-
-    /**
-     * 每个viewHolder的唯一标示
-     * @return
-     */
-    String getDisplayItemId();
 
     /**
      * 设置需要展示的数据对象
