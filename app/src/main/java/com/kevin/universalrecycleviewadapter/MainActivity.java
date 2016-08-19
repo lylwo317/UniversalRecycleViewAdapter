@@ -7,10 +7,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.kevin.recycleradapter.ConvertObjectFuntional;
-import com.kevin.recycleradapter.GeneralRecyclerViewAdapter;
+import com.kevin.recycleradapter.ConvertObjectFunctional;
+import com.kevin.recycleradapter.UniversalRecyclerViewAdapter;
 import com.kevin.recycleradapter.IRecycleViewDisplayItem;
-import com.kevin.recycleradapter.LoadMoreRecyclerViewAdapter;
+import com.kevin.recycleradapter.loadmore.DefaultLoadMoreDisplayItem;
+import com.kevin.recycleradapter.loadmore.LoadMoreRecyclerViewAdapter;
+import com.kevin.recycleradapter.loadmore.LoadMoreState;
 import com.kevin.universalrecycleviewadapter.displayitems.FirstTypeDisplayItem;
 import com.kevin.universalrecycleviewadapter.displayitems.SecondTypeDisplayItem;
 
@@ -48,27 +50,31 @@ public class MainActivity extends AppCompatActivity {
         Collections.addAll(list, listItems);
 
 
-        List<IRecycleViewDisplayItem> displayListItems = ConvertObjectFuntional.convert(list, new ConvertObjectFuntional.Processor<String, IRecycleViewDisplayItem>() {
-            @Override
-            @SuppressWarnings("unchecked")
-            public IRecycleViewDisplayItem process(String currentFrom, int srcIndex, String preFrom) {
-
-                IRecycleViewDisplayItem listItem;
-
-                if (srcIndex % 3 == 0)
+        List<IRecycleViewDisplayItem> displayListItems = ConvertObjectFunctional
+                .convert(list, new ConvertObjectFunctional.Processor<String, IRecycleViewDisplayItem>()
                 {
-                    listItem = new FirstTypeDisplayItem();
-                    listItem.setDisplayData(currentFrom);
-                }else
-                {
-                    listItem = new SecondTypeDisplayItem();
-                    listItem.setDisplayData(currentFrom);
-                }
+                    @Override
+                    @SuppressWarnings("unchecked")
+                    public IRecycleViewDisplayItem process(String currentFrom, int srcIndex, String preFrom)
+                    {
 
-                return listItem;
+                        IRecycleViewDisplayItem listItem;
 
-            }
-        });
+                        if (srcIndex % 3 == 0)
+                        {
+                            listItem = new FirstTypeDisplayItem();
+                            listItem.setDisplayData(currentFrom);
+                        }
+                        else
+                        {
+                            listItem = new SecondTypeDisplayItem();
+                            listItem.setDisplayData(currentFrom);
+                        }
+
+                        return listItem;
+
+                    }
+                });
 
 
         mAdapter = new LoadMoreRecyclerViewAdapter<>(getBaseContext());
@@ -98,27 +104,27 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected void onPostExecute(List<IRecycleViewDisplayItem> o)
                     {
-
-
-                        if (loadTime<2)//failed
+                        if (loadTime==0)
                         {
-                            mAdapter.loadMoreFail();//加载失败
-                        }else if (loadTime == 2)
+                            mAdapter.addList(o);//加载成功
+                            mAdapter.doneLoadMoreSuccess();
+                        }else if (loadTime == 1)
+                        {
+                            mAdapter.doneLoadMoreFailed(LoadMoreState.FAILED);//failed
+                        }
+                        else if (loadTime == 2)
                         {
                             mAdapter.addList(o);
-                            mAdapter.loadMoreSuccess();///加载成功
-                        }else
-                        {
-                            mAdapter.loadMoreFinish();//结束加载更多
+                            mAdapter.disableLoadMore();//关闭加载更多
+                            mAdapter.doneLoadMoreSuccess(); //加载成功
                         }
                         loadTime++;
-                        /*mAdapter.loadMoreSuccess();*/
                     }
                 }.execute();
             }
         });
 
-        mAdapter.setOnItemChangedListener(new GeneralRecyclerViewAdapter.OnItemChangedListener()
+        mAdapter.setOnItemChangedListener(new UniversalRecyclerViewAdapter.OnItemChangedListener()
         {
             @Override
             public void onAddItem(int position, IRecycleViewDisplayItem newItem)
@@ -135,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        mAdapter.openLoadMoreItem();
+        mAdapter.enableLoadMore();
         mAdapter.setList(displayListItems);
     }
 
@@ -150,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             count++;
         }
 
-        return ConvertObjectFuntional.convert(srcList, new ConvertObjectFuntional.Processor<String, IRecycleViewDisplayItem>()
+        return ConvertObjectFunctional.convert(srcList, new ConvertObjectFunctional.Processor<String, IRecycleViewDisplayItem>()
         {
             @Override
             @SuppressWarnings("unchecked")

@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_load"
-        android:text="正在加载..."
+        android:text="@string/load_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>

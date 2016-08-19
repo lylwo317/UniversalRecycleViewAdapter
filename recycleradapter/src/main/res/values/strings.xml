@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RecyclerAdapter</string>
+    <string name="load_fail">Ooops! Something went wrong. Click to try again.</string>
+    <string name="load_loading">Loading&#8230;</string>
 </resources>

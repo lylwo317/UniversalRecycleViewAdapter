@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
-import com.kevin.recycleradapter.GeneralRecyclerViewAdapter;
+import com.kevin.recycleradapter.UniversalRecyclerViewAdapter;
 import com.kevin.recycleradapter.IRecycleViewDisplayItem;
 import com.kevin.universalrecycleviewadapter.viewholders.SecondTypeViewHolderController;
 
@@ -17,9 +17,9 @@ public class SecondTypeDisplayItem implements IRecycleViewDisplayItem<SecondType
     private String data;
 
     @Override
-    public void onShow(final Context context, SecondTypeViewHolderController viewHolderController, final int position, final GeneralRecyclerViewAdapter generalRecyclerViewAdapter) {
+    public void onShow(final Context context, SecondTypeViewHolderController viewHolderController, final int position, final UniversalRecyclerViewAdapter universalRecyclerViewAdapter) {
         viewHolderController.secondTypeItemName.setText(data);
-        viewHolderController.rootView.setOnClickListener(new View.OnClickListener()
+        viewHolderController.getItemView().setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -27,14 +27,14 @@ public class SecondTypeDisplayItem implements IRecycleViewDisplayItem<SecondType
                 Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                 SecondTypeDisplayItem secondTypeDisplayItem = new SecondTypeDisplayItem();
                 secondTypeDisplayItem.setDisplayData(String.valueOf(position));
-                generalRecyclerViewAdapter.addItem(position,secondTypeDisplayItem);
+                universalRecyclerViewAdapter.addItem(position,secondTypeDisplayItem);
             }
         });
     }
 
     @Override
-    public void setDisplayData(String o) {
-        data = o;
+    public void setDisplayData(String displayData) {
+        data = displayData;
     }
 
     @Override
