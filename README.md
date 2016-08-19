@@ -1,4 +1,4 @@
-# UniversalRecycleViewAdapter
+# UniversalRecyclerViewAdapter
 简化RecyclerAdapter使用
 
 演示视频：
