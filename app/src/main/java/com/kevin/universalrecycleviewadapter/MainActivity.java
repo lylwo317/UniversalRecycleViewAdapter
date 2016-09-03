@@ -12,7 +12,6 @@ import com.kevin.recycleradapter.UniversalRecyclerViewAdapter;
 import com.kevin.recycleradapter.IRecycleViewDisplayItem;
 import com.kevin.recycleradapter.loadmore.DefaultLoadMoreDisplayItem;
 import com.kevin.recycleradapter.loadmore.LoadMoreRecyclerViewAdapter;
-import com.kevin.recycleradapter.loadmore.LoadMoreState;
 import com.kevin.universalrecycleviewadapter.displayitems.FirstTypeDisplayItem;
 import com.kevin.universalrecycleviewadapter.displayitems.SecondTypeDisplayItem;
 
@@ -24,10 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-    //private String mItemData = "Lorem Ipsum is";
-
-    private String mItemData = "Lorem Ipsum is simply dummy text of the printing and "
-            + "typesetting industry Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and";
+    private String mItemData = "Lorem Ipsum is simply dummy text of the printing and typesetting industry ";
     private LoadMoreRecyclerViewAdapter<IRecycleViewDisplayItem> mAdapter;
 
     private int count = 1;
@@ -106,17 +102,14 @@ public class MainActivity extends AppCompatActivity {
                     {
                         if (loadTime==0)
                         {
-                            mAdapter.addList(o);//加载成功
-                            mAdapter.doneLoadMoreSuccess();
+                            mAdapter.addList(o);
+                            mAdapter.doneLoadBySuccess();//加载成功
                         }else if (loadTime == 1)
                         {
-                            mAdapter.doneLoadMoreFailed(LoadMoreState.FAILED);//failed
-                        }
-                        else if (loadTime == 2)
-                        {
+                            mAdapter.doneLoadByFailed(DefaultLoadMoreDisplayItem.FAILED);//加载失败
+                        } else if (loadTime == 2) {
                             mAdapter.addList(o);
-                            mAdapter.disableLoadMore();//关闭加载更多
-                            mAdapter.doneLoadMoreSuccess(); //加载成功
+                            mAdapter.doneLoadByFinishLoadAll();//没有更多可以加载
                         }
                         loadTime++;
                     }
@@ -141,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        mAdapter.enableLoadMore();
         mAdapter.setList(displayListItems);
     }
 

@@ -4,20 +4,30 @@ import com.kevin.recycleradapter.AbsRecyclerViewHolderController;
 import com.kevin.recycleradapter.IRecycleViewDisplayItem;
 
 /**
+ * 自动加载更多Item界面控制
  * Created by kevin on 8/19/16.
  * Email:lylwo317@gmail.com
  */
-public interface ILoadMoreDisplayItem<T extends AbsRecyclerViewHolderController, U> extends IRecycleViewDisplayItem<T, U> {
+public interface ILoadMoreDisplayItem<T extends AbsRecyclerViewHolderController, Data> extends IRecycleViewDisplayItem<T, Data> {
 
     /**
-     * 当加载失败时，根据newstate值，切换相应的失败状态界面，例如没有网络，出错重试
+     * 当加载失败时，根据{@code failedState}值，切换相应的失败状态界面，例如没有网络，服务器错误等等
      *
      * @param failedState 可以定义失败的类型，根据不同的failedState做不同的展示
      */
     void switchFailedState(int failedState);
 
+
     /**
-     * 切换到加载中的状态，也就是默认状态
+     * 当调用{@link LoadMoreRecyclerViewAdapter#closeLoadMore()}时，会调用此方法来切换到
+     * 没有更多可以加载的界面提示
+     *
+     * @see DefaultLoadMoreDisplayItem#switchNoMoreState()
+     */
+    void switchNoMoreState();
+
+    /**
+     * 切换到加载中的状态(默认状态)
      */
     void switchLoadingState();
 }

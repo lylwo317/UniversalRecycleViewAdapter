@@ -9,6 +9,9 @@ import com.kevin.recycleradapter.UniversalRecyclerViewAdapter;
 import java.util.List;
 
 /**
+ * 通用的RecyclerView自动加载更多Adapter，已经实现了自定义的样式，可以仿照{@link DefaultLoadMoreDisplayItem}和{@link DefaultLoadMoreHolderController}
+ * 实现自定义的加载更多样式，并通过{@link #setLoadMoreDisplayItem(ILoadMoreDisplayItem)}将自定义加载更多样式绑定到Adapter中。
+ * 或者直接继承{@link UniversalRecyclerViewAdapter}来完全自定义自己的自动加载更多Adapter
  * @author XieJiaHua create on 2016/8/18.(lylwo317@gmail.com)
  */
 public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> extends UniversalRecyclerViewAdapter<T>
@@ -17,6 +20,29 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
 
     @SuppressWarnings("unchecked")
     private ILoadMoreDisplayItem loadMoreDisplayItem = new DefaultLoadMoreDisplayItem();
+
+    /**
+     * 在哪个位置出发加载更多，从最后一个位置倒数。最小值为0，此时在出现加载更多时候才会回调{@link #loadMoreListener}。
+     * 如果设置值为1，则会在出现倒数第一个数据Item时回调{@link #loadMoreListener}，从而提前触发加载更多
+     */
+    private int loadMorePosition = 4;
+
+    /**
+     * 获取自动加载更多触发位置，默认是在最后一个Item加载到布局中时
+     * @return 自动加载更多触发位置
+     */
+    public int getLoadMorePosition() {
+        return loadMorePosition;
+    }
+
+    /**
+     * 设置自动加载更多触发位置，不能为负数。默认为1，表示倒数第一个Item被加载到布局中时（这里不算LoadMoreItem）。为0时，则表示
+     * LoadMoreItem加载到布局中时。
+     * @param loadMorePosition 自动加载更多触发位置
+     */
+    public void setLoadMorePosition(int loadMorePosition) {
+        this.loadMorePosition = loadMorePosition;
+    }
 
     public void setLoadMoreDisplayItem(ILoadMoreDisplayItem loadMoreDisplayItem)
     {
@@ -42,11 +68,11 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
 
     private boolean loading = false;
 
-    private boolean isLoadMoreEnable = false;
+    private boolean isLoadMoreEnable = true;
 
     private boolean isLoadMoreLayoutPosition(int position)
     {
-        return isLoadMoreEnable && position + 1 == getItemCount();
+        return position + 1 == getItemCount();
     }
 
     @Override
@@ -69,15 +95,22 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
     {
         super.onBindViewHolder(innerRecyclerViewViewHolder, position);
 
-        if (position > getItemCount() - 4)
+        if (position >= getItemCount() - (1 + loadMorePosition))
         {
             loadMoreData();
         }
     }
 
+    /**
+     *  执行加载更多
+     */
     protected void loadMoreData()
     {
-        if (loading || !isLoadMoreEnable)
+        if (!isLoadMoreEnable) {
+            return;
+        }
+
+        if (loading)
         {
             return;
         }
@@ -90,18 +123,26 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
         }
     }
 
-    public void doneLoadMoreFailed(@LoadMoreState int state)
+    /**
+     * 调用来切换到失败页面，并通过{@code state}来确定需要切换的状态。比如是，网络未连接，还是服务器返回404,可以给予相应的提示
+     * 回调{@link ILoadMoreDisplayItem#switchFailedState(int)}更新界面状态
+     * @param state 失败的状态，是网络未连接，还是服务器错误。根据这个错误可以切换到相应的界面
+     */
+    public void doneLoadByFailed(int state)
     {
-        doneLoading();
+        stopLoading();
         loadMoreDisplayItem.switchFailedState(state);
     }
 
-    public void doneLoadMoreSuccess()
+    /**
+     * 加载成功，让加载更多可以再次触发
+     */
+    public void doneLoadBySuccess()
     {
-        doneLoading();
+        stopLoading();
     }
 
-    private void doneLoading()
+    private void stopLoading()
     {
         loading = false;
     }
@@ -111,7 +152,7 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
         loading = true;
     }
 
-    public void enableLoadMore()
+    public void openLoadMore()
     {
         if (!this.isLoadMoreEnable)
         {
@@ -120,17 +161,20 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
         }
     }
 
-    public void disableLoadMore()
+    public void closeLoadMore()
     {
         loading = false;
         if (this.isLoadMoreEnable)
         {
-            //int position = getItemCount()-1;
             this.isLoadMoreEnable = false;
-            /*notifyItemRemoved(position);
-            notifyItemChanged(position);*/
-            notifyDataSetChanged();
+            loadMoreDisplayItem.switchNoMoreState();
         }
+    }
+    /**
+     * 已经加载完所有数据，关闭加载更多
+     */
+    public void doneLoadByFinishLoadAll() {
+        closeLoadMore();
     }
 
     @Override
@@ -142,21 +186,7 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
             return 0;
         }
 
-        if (isLoadMoreEnable)
-        {
-            return super.getItemCount() + 1;
-        }
-
-        return super.getItemCount();
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(AbsRecyclerViewHolderController.InnerRecyclerViewViewHolder holder)
-    {
-        if (getItemCount() - 1 == holder.getAdapterPosition())
-        {
-            loadMoreData();
-        }
+        return super.getItemCount() + 1;
     }
 
     public interface LoadMoreListener

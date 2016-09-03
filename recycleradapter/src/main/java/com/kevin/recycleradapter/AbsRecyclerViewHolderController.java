@@ -49,8 +49,8 @@ public abstract class AbsRecyclerViewHolderController
         this.context = context;
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(getLayoutId(), parent, false);
-        initView(view);
         rootView = view;
+        initView(view);
         return new InnerRecyclerViewViewHolder(view, this);
     }
 

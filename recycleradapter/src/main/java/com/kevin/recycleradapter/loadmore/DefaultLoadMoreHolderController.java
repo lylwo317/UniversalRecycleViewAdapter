@@ -1,25 +1,78 @@
 package com.kevin.recycleradapter.loadmore;
 
+import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kevin.recycleradapter.AbsRecyclerViewHolderController;
 import com.kevin.recycleradapter.R;
 
 /**
- * 默认的加载更多样式
+ * 默认的加载更多View控制器
  * Created by kevin on 8/19/16.
  * Email:lylwo317@gmail.com
  */
 public class DefaultLoadMoreHolderController extends AbsRecyclerViewHolderController
 {
+    public View failedLayout;
+    public View loadingLayout;
+    public View noMoreLayout;
 
-    public TextView tvLoad;
+    private ViewGroup rootLayout;
+
+    private View currentLayout;
 
 
+    @SuppressLint("InflateParams")
     @Override
     protected void initView(View rootView) {
-        tvLoad = (TextView) rootView.findViewById(R.id.tv_load);
+
+        if (rootView instanceof ViewGroup) {
+            rootLayout = (ViewGroup) rootView;
+        }
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        loadingLayout = inflater.inflate(R.layout.recycler_view_default_loading_layout, rootLayout,false);
+
+        failedLayout = inflater.inflate(R.layout.recycler_view_default_failed_retry_layout, rootLayout,false);
+
+        noMoreLayout = inflater.inflate(R.layout.recycler_view_default_no_more_layout, rootLayout,false);
+    }
+
+    /**
+     * 切换到相应的布局
+     * @param layout 需要显示的布局
+     */
+    public void switchToLayout(View layout) {
+        if (layout != null && layout!=currentLayout) {
+            rootLayout.removeViewInLayout(currentLayout);
+            rootLayout.addView(layout);
+            currentLayout = layout;
+        }
+    }
+
+    /**
+     * 切换到失败的布局
+     */
+    public void switchToFailedLayout() {
+        switchToLayout(failedLayout);
+    }
+
+    /**
+     * 切换到正在加载的布局
+     */
+    public void switchToLoadingLayout() {
+        switchToLayout(loadingLayout);
+    }
+
+    /**
+     * 切换到没有更多可以加载的布局
+     */
+    public void switchToNoMoreLayout() {
+        switchToLayout(noMoreLayout);
     }
 
     @Override
