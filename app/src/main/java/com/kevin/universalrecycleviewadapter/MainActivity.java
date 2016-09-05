@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         mAdapter.setList(displayListItems);
+        isDestroyed();
     }
 
 

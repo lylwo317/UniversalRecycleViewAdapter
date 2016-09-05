@@ -13,14 +13,14 @@ import com.kevin.universalrecycleviewadapter.R;
 public class SecondTypeViewHolderController extends AbsRecyclerViewHolderController
 {
 
-    public CardView cardlistItem;
+    public CardView cardListItem;
     public TextView textView;
     public TextView secondTypeItemName;
 
     @Override
     protected void initView(View rootView) {
 
-        cardlistItem = (CardView) rootView.findViewById(R.id.cardlist_item);
+        cardListItem = (CardView) rootView.findViewById(R.id.cardlist_item);
         textView = (TextView) rootView.findViewById(R.id.textView);
         secondTypeItemName = (TextView) rootView.findViewById(R.id.second_type_item_name);
 

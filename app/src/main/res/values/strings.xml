@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">UniversalRecycleViewAdapter</string>
+    <string name="first_type">first type</string>
+    <string name="second_type">second type</string>
 </resources>

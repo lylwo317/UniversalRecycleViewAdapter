@@ -25,7 +25,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="first type"
+            android:text="@string/first_type"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -33,7 +33,7 @@
             android:id="@+id/first_type_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/abc_text_size_subhead_material"
+            android:textSize="16sp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 
@@ -42,7 +42,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
