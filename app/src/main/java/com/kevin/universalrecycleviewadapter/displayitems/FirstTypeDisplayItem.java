@@ -5,19 +5,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kevin.recycleradapter.UniversalRecyclerViewAdapter;
-import com.kevin.recycleradapter.IRecycleViewDisplayItem;
-import com.kevin.universalrecycleviewadapter.viewholders.FirstTypeViewHolderController;
+import com.kevin.recycleradapter.IRecyclerDisplayItem;
+import com.kevin.universalrecycleviewadapter.viewholders.FirstTypeViewHolderCtrl;
 
 /**
  * Created by Administrator on 2016/8/17.
  */
-public class FirstTypeDisplayItem implements IRecycleViewDisplayItem<FirstTypeViewHolderController,String>
+public class FirstTypeDisplayItem implements IRecyclerDisplayItem<FirstTypeViewHolderCtrl,String>
 {
 
     private String data;
 
     @Override
-    public void onShow(final Context context, FirstTypeViewHolderController viewHolderController, final int position, final UniversalRecyclerViewAdapter universalRecyclerViewAdapter) {
+    public void onShow(final Context context, FirstTypeViewHolderCtrl viewHolderController, final int position, final UniversalRecyclerViewAdapter universalRecyclerViewAdapter) {
         viewHolderController.firstTypeItemName.setText(data);
         viewHolderController.getItemView().setOnClickListener(new View.OnClickListener()
         {

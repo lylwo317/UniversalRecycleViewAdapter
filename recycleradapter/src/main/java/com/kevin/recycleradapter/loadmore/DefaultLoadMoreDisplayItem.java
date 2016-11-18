@@ -14,7 +14,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by kevin on 8/19/16.
  * Email:lylwo317@gmail.com
  */
-public class DefaultLoadMoreDisplayItem implements ILoadMoreDisplayItem<DefaultLoadMoreHolderController, Object> {
+public class DefaultLoadMoreDisplayItem implements ILoadMoreDisplayItem<DefaultLoadMoreHolderCtrl, Object> {
 
 
     @Retention(RetentionPolicy.SOURCE)
@@ -22,9 +22,9 @@ public class DefaultLoadMoreDisplayItem implements ILoadMoreDisplayItem<DefaultL
     public @interface LoadMoreState {
     }
 
-    public static final int LOADING = 0;
+    private static final int LOADING = 0;
     public static final int FAILED = 1;
-    public static final int NO_MORE = 2;
+    private static final int NO_MORE = 2;
 
 
     @LoadMoreState
@@ -33,12 +33,12 @@ public class DefaultLoadMoreDisplayItem implements ILoadMoreDisplayItem<DefaultL
     @LoadMoreState
     private int needUpdateState = LOADING;
 
-    private DefaultLoadMoreHolderController viewHolderController;
+    private DefaultLoadMoreHolderCtrl viewHolderController;
 
     private LoadMoreRecyclerViewAdapter loadMoreRecyclerViewAdapter;
 
     @Override
-    public void onShow(Context context, DefaultLoadMoreHolderController viewHolderController, int position, UniversalRecyclerViewAdapter universalRecyclerViewAdapter) {
+    public void onShow(Context context, DefaultLoadMoreHolderCtrl viewHolderController, int position, UniversalRecyclerViewAdapter universalRecyclerViewAdapter) {
         this.viewHolderController = viewHolderController;
         loadMoreRecyclerViewAdapter = (LoadMoreRecyclerViewAdapter) universalRecyclerViewAdapter;
         //强制更新一次界面

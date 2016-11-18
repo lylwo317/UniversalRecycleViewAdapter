@@ -1,13 +1,11 @@
 package com.kevin.recycleradapter.loadmore;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.kevin.recycleradapter.AbsRecyclerViewHolderController;
+import com.kevin.recycleradapter.AbsRecyclerViewHolderCtrl;
 import com.kevin.recycleradapter.R;
 
 /**
@@ -15,11 +13,11 @@ import com.kevin.recycleradapter.R;
  * Created by kevin on 8/19/16.
  * Email:lylwo317@gmail.com
  */
-public class DefaultLoadMoreHolderController extends AbsRecyclerViewHolderController
+public class DefaultLoadMoreHolderCtrl extends AbsRecyclerViewHolderCtrl
 {
     public View failedLayout;
-    public View loadingLayout;
-    public View noMoreLayout;
+    private View loadingLayout;
+    private View noMoreLayout;
 
     private ViewGroup rootLayout;
 
@@ -46,7 +44,7 @@ public class DefaultLoadMoreHolderController extends AbsRecyclerViewHolderContro
      * 切换到相应的布局
      * @param layout 需要显示的布局
      */
-    public void switchToLayout(View layout) {
+    private void switchToLayout(View layout) {
         if (layout != null && layout!=currentLayout) {
             rootLayout.removeViewInLayout(currentLayout);
             rootLayout.addView(layout);

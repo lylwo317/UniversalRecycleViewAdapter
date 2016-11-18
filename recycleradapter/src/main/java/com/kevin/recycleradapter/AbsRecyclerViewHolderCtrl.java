@@ -10,13 +10,13 @@ import android.view.ViewGroup;
  * {@link android.support.v7.widget.RecyclerView.ViewHolder} 控制器。主要负责ViewHolder的创建
  * @author XieJiaHua create on 2016/8/11.(lylwo317@gmail.com)
  */
-public abstract class AbsRecyclerViewHolderController
+public abstract class AbsRecyclerViewHolderCtrl
 {
 
     private Context context;
     private View rootView;
 
-    public AbsRecyclerViewHolderController() {
+    public AbsRecyclerViewHolderCtrl() {
 
     }
 
@@ -33,7 +33,7 @@ public abstract class AbsRecyclerViewHolderController
      * 返回Context对象
      * @return context
      */
-    public Context getContext()
+    protected Context getContext()
     {
         return context;
     }
@@ -41,9 +41,9 @@ public abstract class AbsRecyclerViewHolderController
     /**
      * {@link UniversalRecyclerViewAdapter}会调用来创建{@link android.support.v7.widget.RecyclerView.ViewHolder}对象
      *
-     * @param context
+     * @param context 上下文对象
      * @param parent 这里是RecyclerView
-     * @return
+     * @return ViewHolder对象
      */
     public InnerRecyclerViewViewHolder inflate(Context context, ViewGroup parent) {
         this.context = context;
@@ -70,9 +70,9 @@ public abstract class AbsRecyclerViewHolderController
 
     public static class InnerRecyclerViewViewHolder extends RecyclerView.ViewHolder {
 
-        public AbsRecyclerViewHolderController recycleViewHolderController;
+        public final AbsRecyclerViewHolderCtrl recycleViewHolderController;
 
-        public InnerRecyclerViewViewHolder(View itemView, AbsRecyclerViewHolderController controller) {
+        public InnerRecyclerViewViewHolder(View itemView, AbsRecyclerViewHolderCtrl controller) {
             super(itemView);
             recycleViewHolderController = controller;
         }

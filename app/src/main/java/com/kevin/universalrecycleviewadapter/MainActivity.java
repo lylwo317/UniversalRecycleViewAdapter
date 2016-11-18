@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.kevin.recycleradapter.ConvertObjectFunctional;
 import com.kevin.recycleradapter.UniversalRecyclerViewAdapter;
-import com.kevin.recycleradapter.IRecycleViewDisplayItem;
+import com.kevin.recycleradapter.IRecyclerDisplayItem;
 import com.kevin.recycleradapter.loadmore.DefaultLoadMoreDisplayItem;
 import com.kevin.recycleradapter.loadmore.LoadMoreRecyclerViewAdapter;
 import com.kevin.universalrecycleviewadapter.displayitems.FirstTypeDisplayItem;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private String mItemData = "Lorem Ipsum is simply dummy text of the printing and typesetting industry ";
-    private LoadMoreRecyclerViewAdapter<IRecycleViewDisplayItem> mAdapter;
+    private LoadMoreRecyclerViewAdapter<IRecyclerDisplayItem> mAdapter;
 
     private int count = 1;
 
@@ -46,15 +46,15 @@ public class MainActivity extends AppCompatActivity {
         Collections.addAll(list, listItems);
 
 
-        List<IRecycleViewDisplayItem> displayListItems = ConvertObjectFunctional
-                .convert(list, new ConvertObjectFunctional.Processor<String, IRecycleViewDisplayItem>()
+        List<IRecyclerDisplayItem> displayListItems = ConvertObjectFunctional
+                .convert(list, new ConvertObjectFunctional.Processor<String, IRecyclerDisplayItem>()
                 {
                     @Override
                     @SuppressWarnings("unchecked")
-                    public IRecycleViewDisplayItem process(String currentFrom, int srcIndex, String preFrom)
+                    public IRecyclerDisplayItem process(String currentFrom, int srcIndex, String preFrom)
                     {
 
-                        IRecycleViewDisplayItem listItem;
+                        IRecyclerDisplayItem listItem;
 
                         if (srcIndex % 3 == 0)
                         {
@@ -77,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setLoadMoreListener(new LoadMoreRecyclerViewAdapter.LoadMoreListener()
         {
             @Override
-            public void onLoadMore(final IRecycleViewDisplayItem lastItem)
+            public void onLoadMore(final IRecyclerDisplayItem lastItem)
             {
-                new AsyncTask<Object, Object, List<IRecycleViewDisplayItem>>()
+                new AsyncTask<Object, Object, List<IRecyclerDisplayItem>>()
                 {
 
                     @Override
-                    protected List<IRecycleViewDisplayItem> doInBackground(Object... params)
+                    protected List<IRecyclerDisplayItem> doInBackground(Object... params)
                     {
 
                         try
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    protected void onPostExecute(List<IRecycleViewDisplayItem> o)
+                    protected void onPostExecute(List<IRecyclerDisplayItem> o)
                     {
                         if (loadTime==0)
                         {
@@ -120,13 +120,13 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemChangedListener(new UniversalRecyclerViewAdapter.OnItemChangedListener()
         {
             @Override
-            public void onAddItem(int position, IRecycleViewDisplayItem newItem)
+            public void onAddItem(int position, IRecyclerDisplayItem newItem)
             {
 
             }
 
             @Override
-            public void onDelete(int position, IRecycleViewDisplayItem deleteItem)
+            public void onDelete(int position, IRecyclerDisplayItem deleteItem)
             {
 
             }
@@ -135,11 +135,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         mAdapter.setList(displayListItems);
-        isDestroyed();
     }
 
 
-    private List<IRecycleViewDisplayItem> loadMoreData()
+    private List<IRecyclerDisplayItem> loadMoreData()
     {
         List<String> srcList = new ArrayList<>();
 
@@ -149,14 +148,14 @@ public class MainActivity extends AppCompatActivity {
             count++;
         }
 
-        return ConvertObjectFunctional.convert(srcList, new ConvertObjectFunctional.Processor<String, IRecycleViewDisplayItem>()
+        return ConvertObjectFunctional.convert(srcList, new ConvertObjectFunctional.Processor<String, IRecyclerDisplayItem>()
         {
             @Override
             @SuppressWarnings("unchecked")
-            public IRecycleViewDisplayItem process(String currentFrom, int srcIndex, String preFrom)
+            public IRecyclerDisplayItem process(String currentFrom, int srcIndex, String preFrom)
             {
 
-                IRecycleViewDisplayItem listItem;
+                IRecyclerDisplayItem listItem;
 
                 if (srcIndex % 3 == 0)
                 {

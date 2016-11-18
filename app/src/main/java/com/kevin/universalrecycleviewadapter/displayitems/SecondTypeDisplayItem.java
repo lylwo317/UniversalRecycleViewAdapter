@@ -5,19 +5,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kevin.recycleradapter.UniversalRecyclerViewAdapter;
-import com.kevin.recycleradapter.IRecycleViewDisplayItem;
-import com.kevin.universalrecycleviewadapter.viewholders.SecondTypeViewHolderController;
+import com.kevin.recycleradapter.IRecyclerDisplayItem;
+import com.kevin.universalrecycleviewadapter.viewholders.SecondTypeViewHolderCtrl;
 
 /**
  * Created by Administrator on 2016/8/17.
  */
-public class SecondTypeDisplayItem implements IRecycleViewDisplayItem<SecondTypeViewHolderController, String>
+public class SecondTypeDisplayItem implements IRecyclerDisplayItem<SecondTypeViewHolderCtrl, String>
 {
 
     private String data;
 
     @Override
-    public void onShow(final Context context, SecondTypeViewHolderController viewHolderController, final int position, final UniversalRecyclerViewAdapter universalRecyclerViewAdapter) {
+    public void onShow(final Context context, SecondTypeViewHolderCtrl viewHolderController, final int position, final UniversalRecyclerViewAdapter universalRecyclerViewAdapter) {
         viewHolderController.secondTypeItemName.setText(data);
         viewHolderController.getItemView().setOnClickListener(new View.OnClickListener()
         {

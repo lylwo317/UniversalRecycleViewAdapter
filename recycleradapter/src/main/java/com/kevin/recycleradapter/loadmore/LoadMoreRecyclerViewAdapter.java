@@ -2,19 +2,19 @@ package com.kevin.recycleradapter.loadmore;
 
 import android.content.Context;
 
-import com.kevin.recycleradapter.AbsRecyclerViewHolderController;
-import com.kevin.recycleradapter.IRecycleViewDisplayItem;
+import com.kevin.recycleradapter.AbsRecyclerViewHolderCtrl;
+import com.kevin.recycleradapter.IRecyclerDisplayItem;
 import com.kevin.recycleradapter.UniversalRecyclerViewAdapter;
 
 import java.util.List;
 
 /**
- * 通用的RecyclerView自动加载更多Adapter，已经实现了自定义的样式，可以仿照{@link DefaultLoadMoreDisplayItem}和{@link DefaultLoadMoreHolderController}
+ * 通用的RecyclerView自动加载更多Adapter，已经实现了自定义的样式，可以仿照{@link DefaultLoadMoreDisplayItem}和{@link DefaultLoadMoreHolderCtrl}
  * 实现自定义的加载更多样式，并通过{@link #setLoadMoreDisplayItem(ILoadMoreDisplayItem)}将自定义加载更多样式绑定到Adapter中。
  * 或者直接继承{@link UniversalRecyclerViewAdapter}来完全自定义自己的自动加载更多Adapter
  * @author XieJiaHua create on 2016/8/18.(lylwo317@gmail.com)
  */
-public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> extends UniversalRecyclerViewAdapter<T>
+public class LoadMoreRecyclerViewAdapter<T extends IRecyclerDisplayItem> extends UniversalRecyclerViewAdapter<T>
 {
 
 
@@ -91,7 +91,7 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
     }
 
     @Override
-    public void onBindViewHolder(AbsRecyclerViewHolderController.InnerRecyclerViewViewHolder innerRecyclerViewViewHolder, int position)
+    public void onBindViewHolder(AbsRecyclerViewHolderCtrl.InnerRecyclerViewViewHolder innerRecyclerViewViewHolder, int position)
     {
         super.onBindViewHolder(innerRecyclerViewViewHolder, position);
 
@@ -104,7 +104,7 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
     /**
      *  执行加载更多
      */
-    protected void loadMoreData()
+    void loadMoreData()
     {
         if (!isLoadMoreEnable) {
             return;
@@ -161,7 +161,7 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
         }
     }
 
-    public void closeLoadMore()
+    private void closeLoadMore()
     {
         loading = false;
         if (this.isLoadMoreEnable)
@@ -191,6 +191,6 @@ public class LoadMoreRecyclerViewAdapter<T extends IRecycleViewDisplayItem> exte
 
     public interface LoadMoreListener
     {
-        void onLoadMore(IRecycleViewDisplayItem item);
+        void onLoadMore(IRecyclerDisplayItem item);
     }
 }

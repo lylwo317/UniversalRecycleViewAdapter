@@ -1,14 +1,14 @@
 package com.kevin.recycleradapter.loadmore;
 
-import com.kevin.recycleradapter.AbsRecyclerViewHolderController;
-import com.kevin.recycleradapter.IRecycleViewDisplayItem;
+import com.kevin.recycleradapter.AbsRecyclerViewHolderCtrl;
+import com.kevin.recycleradapter.IRecyclerDisplayItem;
 
 /**
  * 自动加载更多Item界面控制
  * Created by kevin on 8/19/16.
  * Email:lylwo317@gmail.com
  */
-public interface ILoadMoreDisplayItem<T extends AbsRecyclerViewHolderController, Data> extends IRecycleViewDisplayItem<T, Data> {
+interface ILoadMoreDisplayItem<T extends AbsRecyclerViewHolderCtrl, Data> extends IRecyclerDisplayItem<T, Data> {
 
     /**
      * 当加载失败时，根据{@code failedState}值，切换相应的失败状态界面，例如没有网络，服务器错误等等

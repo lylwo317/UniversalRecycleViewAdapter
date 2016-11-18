@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
  * @param <T> AbsViewHolder
  * @param <Data> ContentData Type
  */
-public interface IRecycleViewDisplayItem<T extends AbsRecyclerViewHolderController, Data> {
+public interface IRecyclerDisplayItem<T extends AbsRecyclerViewHolderCtrl, Data> {
 
     /**
      * 数据展示操作和业务相关的操作。{@link UniversalRecyclerViewAdapter#onBindViewHolder(RecyclerView.ViewHolder, int)} 调用此方法

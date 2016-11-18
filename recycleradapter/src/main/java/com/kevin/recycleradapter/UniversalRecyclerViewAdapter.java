@@ -13,17 +13,17 @@ import java.util.Map;
 
 /**
  * 通用的RecyclerViewAdapter。
- * 主要获取并维护{@link IRecycleViewDisplayItem}与{@link AbsRecyclerViewHolderController}之间的关系映射，从而不用再去自己维护每种布局的对应关系
+ * 主要获取并维护{@link IRecyclerDisplayItem}与{@link AbsRecyclerViewHolderCtrl}之间的关系映射，从而不用再去自己维护每种布局的对应关系
  * 用户可以动态加入不同种类的Item。还可以在此基础上通过继承实现其它功能，例如加载更多{@link com.kevin.recycleradapter.loadmore.LoadMoreRecyclerViewAdapter}
  * @author  XieJiaHua create on 2016/8/11.(lylwo317@gmail.com)
  */
-public class UniversalRecyclerViewAdapter<T extends IRecycleViewDisplayItem> extends RecyclerView.Adapter<AbsRecyclerViewHolderController.InnerRecyclerViewViewHolder> {
-    private Context context;
+public class UniversalRecyclerViewAdapter<T extends IRecyclerDisplayItem> extends RecyclerView.Adapter<AbsRecyclerViewHolderCtrl.InnerRecyclerViewViewHolder> {
+    private final Context context;
     protected List<T> displayItemList;
 
-    private Map<Class<? extends IRecycleViewDisplayItem>, Class<? extends AbsRecyclerViewHolderController>> displayAndViewHolderMap = new HashMap<>();
+    private final Map<Class<? extends IRecyclerDisplayItem>, Class<? extends AbsRecyclerViewHolderCtrl>> displayAndViewHolderMap = new HashMap<>();
 
-    private List<Class<? extends AbsRecyclerViewHolderController>> viewHolderControllerList = new ArrayList<>();
+    private final List<Class<? extends AbsRecyclerViewHolderCtrl>> viewHolderControllerList = new ArrayList<>();
 
     /**
      * 设置Item被删除或添加的监听器
@@ -51,11 +51,11 @@ public class UniversalRecyclerViewAdapter<T extends IRecycleViewDisplayItem> ext
         }
     }
 
-    public UniversalRecyclerViewAdapter(Context context) {
+    protected UniversalRecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
-    public UniversalRecyclerViewAdapter(Context context, List<T> displayItemList) {
+    protected UniversalRecyclerViewAdapter(Context context, List<T> displayItemList) {
         this.displayItemList = displayItemList;
         this.context = context;
     }
@@ -132,10 +132,10 @@ public class UniversalRecyclerViewAdapter<T extends IRecycleViewDisplayItem> ext
     }
 
     @Override
-    public AbsRecyclerViewHolderController.InnerRecyclerViewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AbsRecyclerViewHolderCtrl.InnerRecyclerViewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         try {
-            AbsRecyclerViewHolderController controller = viewHolderControllerList.get(viewType).newInstance();
+            AbsRecyclerViewHolderCtrl controller = viewHolderControllerList.get(viewType).newInstance();
             return controller.inflate(context, parent);
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -147,7 +147,7 @@ public class UniversalRecyclerViewAdapter<T extends IRecycleViewDisplayItem> ext
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onBindViewHolder(AbsRecyclerViewHolderController.InnerRecyclerViewViewHolder innerRecyclerViewViewHolder, int position) {
+    public void onBindViewHolder(AbsRecyclerViewHolderCtrl.InnerRecyclerViewViewHolder innerRecyclerViewViewHolder, int position) {
         getDisplayItem(position).onShow(context, innerRecyclerViewViewHolder.recycleViewHolderController, position, this);
     }
 
@@ -155,23 +155,23 @@ public class UniversalRecyclerViewAdapter<T extends IRecycleViewDisplayItem> ext
     @Override
     @SuppressWarnings("unchecked")
     public int getItemViewType(int position) {
-        IRecycleViewDisplayItem displayListItem = getDisplayItem(position);
-        Class<? extends AbsRecyclerViewHolderController> viewHolderController = getViewHolderCtrlByDisplayItem(displayListItem);
+        IRecyclerDisplayItem displayListItem = getDisplayItem(position);
+        Class<? extends AbsRecyclerViewHolderCtrl> viewHolderController = getViewHolderCtrlByDisplayItem(displayListItem);
         return viewHolderControllerList.indexOf(viewHolderController);
     }
 
     /**
      * 先从{@link #displayAndViewHolderMap}缓存中查找<code>displayItem</code>对应的ViewHolderController类型，如果没有则
-     * 通过反射获取{@link IRecycleViewDisplayItem}上的泛型类{@link IRecycleViewDisplayItem<T>}的具体Class对象,并加入到缓存中，下次不用
+     * 通过反射获取{@link IRecyclerDisplayItem}上的泛型类{@link IRecyclerDisplayItem <T>}的具体Class对象,并加入到缓存中，下次不用
      * 再通过反射获取
-     * @param displayItem
-     * @return
+     * @param displayItem 需要显示的数据封装对象
+     * @return 相对应的AbsRylViewHolderCtrl实现类
      */
     @SuppressWarnings("unchecked")
-    private Class<? extends AbsRecyclerViewHolderController> getViewHolderCtrlByDisplayItem(IRecycleViewDisplayItem displayItem) {
+    private Class<? extends AbsRecyclerViewHolderCtrl> getViewHolderCtrlByDisplayItem(IRecyclerDisplayItem<? extends AbsRecyclerViewHolderCtrl, ?> displayItem) {
 
-        Class<? extends AbsRecyclerViewHolderController> viewHolderController = displayAndViewHolderMap.get(displayItem.getClass());
-        if (viewHolderController == null) {
+        Class<? extends AbsRecyclerViewHolderCtrl> viewHolderCtrlClazz = displayAndViewHolderMap.get(displayItem.getClass());
+        if (viewHolderCtrlClazz == null) {
             Type[] genericInterfaces = displayItem.getClass().getGenericInterfaces();
             for (Type genericInterface : genericInterfaces) {
 
@@ -181,22 +181,23 @@ public class UniversalRecyclerViewAdapter<T extends IRecycleViewDisplayItem> ext
                     for (Type genericType : genericTypes) {
 
                         if (genericType instanceof Class) {
-                            if (AbsRecyclerViewHolderController.class.isAssignableFrom((Class<?>) genericType)) {
+                            if (AbsRecyclerViewHolderCtrl.class.isAssignableFrom((Class<?>) genericType)) {
 
-                                viewHolderController = (Class<? extends AbsRecyclerViewHolderController>) genericType;
-                                displayAndViewHolderMap.put(displayItem.getClass(), viewHolderController);
+                                viewHolderCtrlClazz = (Class<? extends AbsRecyclerViewHolderCtrl>) genericType;
+                                displayAndViewHolderMap.put(displayItem.getClass(), viewHolderCtrlClazz);
 
-                                if (!viewHolderControllerList.contains(viewHolderController)) {
-                                    viewHolderControllerList.add(viewHolderController);
+                                if (!viewHolderControllerList.contains(viewHolderCtrlClazz)) {
+                                    viewHolderControllerList.add(viewHolderCtrlClazz);
                                 }
                             }
+                            break;
                         }
 
                     }
                 }
             }
         }
-        return viewHolderController;
+        return viewHolderCtrlClazz;
     }
 
     @Override
@@ -209,8 +210,8 @@ public class UniversalRecyclerViewAdapter<T extends IRecycleViewDisplayItem> ext
      * 监听删除和添加Item操作
      */
     public interface OnItemChangedListener {
-        void onAddItem(int position, IRecycleViewDisplayItem newItem);
+        void onAddItem(int position, IRecyclerDisplayItem newItem);
 
-        void onDelete(int position, IRecycleViewDisplayItem deleteItem);
+        void onDelete(int position, IRecyclerDisplayItem deleteItem);
     }
 }

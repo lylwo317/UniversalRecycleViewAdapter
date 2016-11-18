@@ -20,7 +20,7 @@ public class ConvertObjectFunctional
          * @param preFrom 前一个From对象。有可能为null
          * @return To类型对象
          */
-        public To process(From currentFrom, int srcIndex, @Nullable From preFrom);
+        To process(From currentFrom, int srcIndex, @Nullable From preFrom);
     }
 
     /**

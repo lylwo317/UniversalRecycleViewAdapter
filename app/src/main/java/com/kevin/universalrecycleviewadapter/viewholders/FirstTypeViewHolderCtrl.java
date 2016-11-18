@@ -4,13 +4,13 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kevin.recycleradapter.AbsRecyclerViewHolderController;
+import com.kevin.recycleradapter.AbsRecyclerViewHolderCtrl;
 import com.kevin.universalrecycleviewadapter.R;
 
 /**
  * Created by Administrator on 2016/8/17.
  */
-public class FirstTypeViewHolderController extends AbsRecyclerViewHolderController
+public class FirstTypeViewHolderCtrl extends AbsRecyclerViewHolderCtrl
 {
 
     public CardView cardListItem;
@@ -18,7 +18,7 @@ public class FirstTypeViewHolderController extends AbsRecyclerViewHolderControll
 
     @Override
     protected void initView(View rootView) {
-        cardListItem = (CardView) rootView.findViewById(R.id.cardlist_item);
+        cardListItem = (CardView) rootView.findViewById(R.id.cardList_item);
         firstTypeItemName = (TextView) rootView.findViewById(R.id.first_type_item_name);
 
     }
